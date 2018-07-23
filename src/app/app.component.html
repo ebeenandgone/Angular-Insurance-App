@@ -1,0 +1,124 @@
+<div class="form-container">
+  <div class="row">
+    <div class="large-4 columns">
+      <div>
+        <form [formGroup]="rForm" (ngSubmit)="quoteData(rForm.value)">
+          <div class="form-container">
+            <div class="row columns">
+              <h1>Loans 4 U</h1>
+
+              <div class="input-group">
+                <span class="input-group-label"><i class="fa fa-pencil" aria-hidden="true">   Surname</i></span>
+                <input class="input-group-field" type="text" formControlName="surname" placeholder="Surname">
+              </div>
+              <div class="alert" *ngIf="!rForm.controls['surname'].valid && rForm.controls['surname'].touched">{{ titleAlert }}</div>
+
+              <div class="input-group">
+                <span class="input-group-label"><i class="fa fa-envelope" aria-hidden="true"></i>   Email</span>
+                <input class="input-group-field" type="text" formControlName="email" placeholder="Email Address">
+              </div>
+              <div class="alert" *ngIf="!rForm.controls['email'].valid && rForm.controls['email'].touched">{{ emailAlert }}</div>
+
+              <!-- Restricted to 11 numbers and symbols to allow for +'s' or -'s' -->
+              <div class="input-group">
+                <span class="input-group-label"><i class="fa fa-phone" aria-hidden="true"></i>   Tel:</span>
+                <input class="input-group-field" type="text" (keypress)="phoneCheck($event)" minlength=11 maxlength=14 formControlName="phone_number" placeholder="Phone Number">
+              </div>
+              <div class="alert" *ngIf="!rForm.controls['phone_number'].valid && rForm.controls['phone_number'].touched">{{ phoneAlert }}</div>
+
+
+              <div class="input-group">
+                <span class="input-group-label"><i class="fa fa-gbp" aria-hidden="true"></i>  Deposit</span>
+                <input class="input-group-field" type="text" (keypress)="currencyCheck($event)" formControlName="sizeOfDeposit" placeholder="Deposit Amount">
+              </div>
+              <div class="alert" *ngIf="!rForm.controls['sizeOfDeposit'].valid && rForm.controls['sizeOfDeposit'].touched">{{ titleAlert }}</div>
+              
+              <div class="input-group">
+                <span class="input-group-label"><i class="fa fa-calendar" aria-hidden="true">    Loan Length</i></span>
+                <select class="input-group-field" formControlName="loanLength" placeholder="Loan Length">
+                  <option type="text" value="10">10 Years</option>
+                  <option type="text" value="20">20 Years</option>
+                  <option type="text" value="30">30 Years</option>
+                </select>
+              </div>
+              <div class="alert" *ngIf="!rForm.controls['sizeOfDeposit'].valid && rForm.controls['sizeOfDeposit'].touched">{{ titleAlert }}</div>
+
+
+              <div class="input-group">
+                <span class="input-group-label"><i class="fa fa-gbp" aria-hidden="true"></i>  Salary</span>
+                <input class="input-group-field" type="text" (keypress)="currencyCheck($event)" formControlName="annualSalary" placeholder="Annual Salary">
+              </div>
+              <div class="alert" *ngIf="!rForm.controls['annualSalary'].valid && rForm.controls['annualSalary'].touched">{{ titleAlert }}</div>
+
+              <div class="input-group">
+                <span class="input-group-label"><i class="fa fa-gbp" aria-hidden="true"></i>  Loan Amount</span>
+                <input class="input-group-field" type="text" (keypress)="currencyCheck($event)" formControlName="loanAmount" placeholder="Loan Amount">
+              </div>
+              <div class="alert" *ngIf="!rForm.controls['loanAmount'].valid && rForm.controls['loanAmount'].touched">{{ titleAlert }}</div>
+              
+
+              <div class="input-group">
+                <span class="input-group-label"><i class="fa fa-user" aria-hidden="true">    Do you have a bank account?</i></span>
+                <select class="input-group-field" formControlName="isUser" placeholder="Current User">
+                  <option type="text" value="1">Yes</option>
+                  <option type="text" value="0">No</option>
+                </select>
+              </div>
+              <div class="alert" *ngIf="!rForm.controls['isUser'].valid && rForm.controls['isUser'].touched">{{ titleAlert }}</div>
+
+              <hr>
+
+              <input type="submit" class="button expanded" value="Submit Form" [disabled]="!rForm.valid">
+              <!-- <input type="submit" class="button expanded" value="Submit Form"> -->
+
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- This contains the CurrencyPipe code to format the relevant
+    data as £s with the correct decimals at the end. -->
+    <div class="large-8 columns table-column" >
+      <ng-container *ngIf="surname">
+        <div class="table-scroll">
+          <table class="tableClass">
+            <tr>
+              <th>Option</th>
+              <th>Interest Rate</th>
+              <th>Mortgage Length</th>
+              <th>Amount Borrowed</th>
+              <th>Amount Repayable</th>
+              <th>Monthly Replayment</th>
+            </tr>
+            <tr *ngFor="let item of optionsArray">
+              <td>{{ item.getOptionName() }} </td>
+              <td>{{ item.getInterestRate() }}% </td>
+              <td>{{ item.getLoanLength() }}</td>
+              <td>{{ item.getLoanAmount()  | currency:'GBP':'symbol-narrow':'4.2'}}</td>
+              <td>{{ item.getAmountRepayable()  | currency:'GBP':'symbol-narrow':'4.2-2'}}</td>
+              <td>{{ item.getMonthlyRepayment() | currency:'GBP':'symbol-narrow':'4.2-2'}}</td>
+            </tr>
+            <tr *ngFor="let items of errorArray" style="color: black;">
+              <td colspan="6">{{ items.getErrorMessage() }}</td>
+              <td style="display:none;"></td>
+              <td style="display:none;"></td>
+              <td style="display:none;"></td>
+              <td style="display:none;"></td>
+              <td style="display:none;"></td>
+            </tr>
+          </table>
+        </div>
+
+        <hr>
+
+        <span style="width:100%; text-align:center;">Lowest monthly repayments are highlighted in Red.</span>
+
+        <hr>
+        
+        <input type="submit" (click)="clearQuote()" class="button expanded" value="Refresh Page">
+
+      </ng-container>
+    </div>
+  </div>
+</div>
