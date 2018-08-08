@@ -92,7 +92,7 @@ export class OptionB {
   }
 
   /*
-  * This is to check if this option is valid
+  * This is to check if this option is valid .
   */
   validForOption(){
 
